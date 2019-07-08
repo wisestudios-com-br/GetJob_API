@@ -4,38 +4,7 @@ from	jsonschema	import validate, exceptions
 from	mongoengine	import *
 
 from	.curriculo	import schema_curriculo, Curriculo
-
-schema_endereco	= {
-	"type":	"object",
-	"properties": {
-		"estado": {
-			"type": "string"
-		},
-		"cidade": {
-			"type": "string"
-		},
-		"cep": {
-			"type": "number"
-		},
-		"bairro": {
-			"type": "string"
-		},
-		"rua": {
-			"type": "string"
-		},
-		"numero": {
-			"type": "number"
-		},
-	},
-	"required": [
-		"estado",
-		"cidade",
-		"cep",
-		"bairro",
-		"rua",
-		"numero"
-	]
-}
+from	.endereco	import schema_endereco, Endereco
 
 schema_cliente	= {
 	"type": "object",
@@ -92,14 +61,6 @@ class ClienteType(hug.types.Type):
 				"invalid":		numpy.array(e.relative_path),
 				"required":		e.validator_value
 			})
-
-class Endereco(EmbeddedDocument):
-	estado	= StringField(max_length=100, required=True)
-	cidade	= StringField(max_length=100, required=True)
-	cep		= DecimalField(max_length=9, required=True)
-	bairro	= StringField(max_length=100, required=True)
-	rua		= StringField(max_length=100, required=True)
-	numero	= DecimalField(max_length=4, required=True)
 
 class Cliente(DynamicDocument):
 	cpf				= DecimalField(max_length=11, required=True)
