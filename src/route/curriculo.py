@@ -1,27 +1,27 @@
 import hug
 
 @hug.get('/')
-def getIndex():
+def get_index():
 	return ""
 
 @hug.get('/{id}')
-def getById(
+def get_byId(
 	id: hug.types.number
 ):
 	return ""
 
 @hug.post('/')
-def postData():
+def post_data():
 	return ""
 
 @hug.put('/{id}')
-def putData(
+def put_data(
 	id: hug.types.number
 ):
 	return ""
 
 @hug.delete('/{id}')
-def deleteData(
+def delete_data(
 	id: hug.types.number
 ):
 	return ""

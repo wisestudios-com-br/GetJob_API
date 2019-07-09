@@ -1,33 +1,30 @@
-import	hug
-import	numpy
-from	jsonschema	import validate, exceptions
-from	model		import cliente
+import hug
 
 @hug.get('/')
-def getIndex():
+def get_index():
 	return ""
 
 @hug.get('/{id}')
-def getById(
+def get_byId(
 	id: hug.types.number
 ):
 	return ""
 
 @hug.post('/')
-def postData(
+def post_data(
 	cliente: cliente.ClienteType()
 ):
 	return ""
 
 @hug.put('/{id}')
-def putData(
+def put_data(
 	id: hug.types.number,
 	cliente: cliente.ClienteType()
 ):
 	return ""
 
 @hug.delete('/{id}')
-def deleteData(
+def delete_data(
 	id: hug.types.number
 ):
 	return ""

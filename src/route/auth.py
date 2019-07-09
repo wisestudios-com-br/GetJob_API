@@ -4,7 +4,7 @@ from	controller		import auth
 from	library.veryx	import auth as veryx
 
 @hug.get('/token', requires=veryx.basicAccess(), version=1)
-def getData(response):
+def get_data(response):
 	return auth.getData(response)
 
 @hug.post('/token', version=1)
