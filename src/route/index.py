@@ -1,6 +1,7 @@
 import hug
 
-from	route		import cliente, empresa, vaga
+from	route			import cliente, empresa, vaga
+from	library.veryx	import auth
 
 @hug.get('/')
 def getIndex():
