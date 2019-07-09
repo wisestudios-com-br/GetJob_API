@@ -39,9 +39,9 @@ def getAuth(response, client_id, client_secret):
 		datas	= False
 		level	= auths['level']
 		if level == "cliente":
-			datas	= db_data.clientes.find_one({ "cpf": client_id })
+			datas	= db_data.cliente.find_one({ "cpf": client_id })
 		elif level == "empresa":
-			datas	= db_data.empresas.find_one({ "cnpj": client_id })
+			datas	= db_data.empresa.find_one({ "cnpj": client_id })
 		if auths and datas:
 			if client_secret == cryptKey.decryptContent(datas['senha'], auths['hash']):
 				return level
@@ -134,9 +134,9 @@ def getData(response):
 	client_id	= locals['client_id']
 	data		= False
 	if level == "cliente":
-		data	= db_data.clientes.find_one({ 'cpf': client_id })
+		data	= db_data.cliente.find_one({ 'cpf': client_id })
 	elif level == "empresa":
-		data	= db_data.empresas.find_one({ 'cnpj': client_id })
+		data	= db_data.empresa.find_one({ 'cnpj': client_id })
 	if data:
 		data.pop('_id')
 		data.pop('senha')
