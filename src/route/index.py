@@ -1,7 +1,6 @@
 import hug
 
-from	route			import cliente, empresa, vaga
-from	library.veryx	import auth
+from	route			import auth, cliente, empresa, vaga
 
 @hug.get('/')
 def getIndex():
@@ -18,3 +17,7 @@ def empresa_api():
 @hug.extend_api('/vagas')
 def vaga_api():
 	return [vaga]
+
+@hug.extend_api('/oauth')
+def auth_api():
+	return [auth]
