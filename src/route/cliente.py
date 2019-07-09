@@ -16,9 +16,10 @@ def get_byId(
 
 @hug.post('/')
 def post_data(
-	cliente: modelCliente.ClienteType()
+	cliente: modelCliente.ClienteType(),
+	response
 ):
-	return controllerCliente.newCliente(cliente)
+	return controllerCliente.newCliente(response, cliente)
 
 @hug.put('/{id}', requires=auth.basicAccess("cliente"))
 def put_data(
