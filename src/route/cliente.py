@@ -1,10 +1,14 @@
-import hug
+import	hug
 
-@hug.get('/')
+from	library.veryx	import auth
+from	controller		import cliente as controllerCliente
+from	model			import cliente as modelCliente
+
+@hug.get('/', requires=auth.basicAccess())
 def get_index():
 	return ""
 
-@hug.get('/{id}')
+@hug.get('/{id}', requires=auth.basicAccess())
 def get_byId(
 	id: hug.types.number
 ):
@@ -12,18 +16,18 @@ def get_byId(
 
 @hug.post('/')
 def post_data(
-	cliente: cliente.ClienteType()
+	cliente: modelCliente.ClienteType()
 ):
-	return ""
+	return controllerCliente.newCliente(cliente)
 
-@hug.put('/{id}')
+@hug.put('/{id}', requires=auth.basicAccess("cliente"))
 def put_data(
 	id: hug.types.number,
-	cliente: cliente.ClienteType()
+	cliente: modelCliente.ClienteType()
 ):
 	return ""
 
-@hug.delete('/{id}')
+@hug.delete('/{id}', requires=auth.basicAccess("cliente"))
 def delete_data(
 	id: hug.types.number
 ):
