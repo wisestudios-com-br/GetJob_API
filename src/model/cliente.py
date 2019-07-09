@@ -41,6 +41,7 @@ schema_cliente	= {
 	},
 	"required": [
 		"cpf",
+		"senha",
 		"nome",
 		"sobrenome",
 		"email",
@@ -66,6 +67,7 @@ class Cliente(DynamicDocument):
 	cpf				= DecimalField(max_length=11, required=True)
 	nome			= StringField(max_length=50, required=True)
 	sobrenome		= StringField(max_length=50, required=True)
+	senha			= StringField(required=True)
 	email			= StringField(max_length=254, required=True)
 	telefone		= StringField(max_length=15, required=True)
 	cnh				= BooleanField()
