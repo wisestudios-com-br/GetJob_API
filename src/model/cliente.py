@@ -56,7 +56,6 @@ class ClienteType(hug.types.Type):
 		try:
 			return validate(value, schema_cliente)
 		except exceptions.ValidationError as e:
-			print(e)
 			raise ValueError({
 				"invalid":		numpy.array(e.relative_path),
 				"required":		e.validator_value
