@@ -3,7 +3,7 @@ import hug
 from	route			import auth, cliente, empresa, vaga
 
 @hug.get('/')
-def getIndex():
+def get_index():
 	return ""
 
 @hug.extend_api('/clientes')
