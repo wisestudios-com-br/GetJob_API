@@ -42,7 +42,8 @@ class CurriculoType(hug.types.Type):
 
 	def __call__(self, value):
 		try:
-			return validate(value, schema_curriculo)
+			validate(value, schema_curriculo)
+			return value
 		except exceptions.ValidationError as e:
 			raise ValueError({
 				"atribute":	numpy.array(e.relative_path),
