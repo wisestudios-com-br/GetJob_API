@@ -5,14 +5,17 @@ from	controller		import cliente as controllerCliente
 from	model			import cliente as modelCliente
 
 @hug.get('/', requires=auth.basicAccess())
-def get_index():
-	return ""
+def get_index(
+	response
+):
+	return controllerCliente.getClientes(response)
 
 @hug.get('/{id}', requires=auth.basicAccess())
 def get_byId(
-	id: hug.types.number
+	id: hug.types.number,
+	response
 ):
-	return ""
+	return controllerCliente.getClienteByCpf(response, id)
 
 @hug.post('/')
 def post_data(
