@@ -64,7 +64,7 @@ class ClienteType(hug.types.Type):
 			})
 
 class Cliente(DynamicDocument):
-	cpf				= DecimalField(max_length=11, required=True)
+	cpf				= DecimalField(max_length=11, unique=True, required=True)
 	nome			= StringField(max_length=50, required=True)
 	sobrenome		= StringField(max_length=50, required=True)
 	senha			= StringField(required=True)
