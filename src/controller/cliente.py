@@ -1,5 +1,6 @@
 import	json
-from	falcon					import HTTP_400, HTTP_403, HTTP_502
+from	falcon		import HTTP_400, HTTP_403, HTTP_502
+from	datetime	import datetime
 
 from	model.cliente	import Cliente
 from	model.endereco	import Endereco
@@ -29,7 +30,6 @@ def getClienteByCpf(response, cpf):
 		return data
 
 	except Exception as e:
-		print(e)
 		response.status = HTTP_502
 		return { "error": "bad_gateway" }
 
@@ -44,8 +44,34 @@ def newCliente(response, data):
 			e=e
 		data.pop("endereco")
 		cliente	= Cliente(endereco=endereco, **data)
+		cliente["timestamp"]	= datetime.now()
+		cliente["timeupdate"]	= datetime.now()
 		cliente.save()
-		return cliente.to_json()
+		return json.loads(cliente.to_json())
 	except Exception as e:
 		response.status = HTTP_502
 		return { "error": "bad_gateway" }
+
+def updateCliente(response, cpf, data):
+	locals	= eval(response.get_header("locals"))
+	if locals["client_id"] == cpf:
+		try:
+			endereco	= Endereco(**data["endereco"])
+			data.pop("endereco")
+			data.pop("senha", None)
+			data.pop("_id", None)
+			data.pop("timestamp", None)
+			data.pop("timeupdate", None)
+			cliente					= Cliente.objects.get(cpf=cpf)
+			cliente["endereco"]		= endereco
+			cliente["timeupdate"]	= datetime.now()
+			for key, value in data.items():
+				cliente[key]	= value
+			cliente.save()
+			return json.loads(cliente.to_json())
+		except Exception as e:
+			response.status = HTTP_502
+			return { "error": "bad_gateway" }
+	else:
+		response.status = HTTP_403
+		return { "error" : "access_denied" }

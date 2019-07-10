@@ -2,6 +2,7 @@ import	hug
 import	numpy
 from	jsonschema	import validate, exceptions
 from	mongoengine	import *
+from	datetime	import datetime
 
 from	.curriculo	import schema_curriculo, Curriculo
 from	.endereco	import schema_endereco, Endereco
@@ -75,3 +76,5 @@ class Cliente(DynamicDocument):
 	relacionamento	= BooleanField()
 	endereco		= EmbeddedDocumentField(Endereco, required=True)
 	curriculo		= EmbeddedDocumentField(Curriculo)
+	timestamp		= DateTimeField(default=datetime.now())
+	timeupdate		= DateTimeField(default=datetime.now())

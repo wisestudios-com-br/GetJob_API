@@ -27,9 +27,10 @@ def post_data(
 @hug.put('/{id}', requires=auth.basicAccess("cliente"))
 def put_data(
 	id: hug.types.number,
-	cliente: modelCliente.ClienteType()
+	cliente: modelCliente.ClienteType(),
+	response
 ):
-	return ""
+	return controllerCliente.updateCliente(response, id, cliente)
 
 @hug.delete('/{id}', requires=auth.basicAccess("cliente"))
 def delete_data(
