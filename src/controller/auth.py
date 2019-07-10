@@ -79,6 +79,18 @@ def updateAuth(response, client_id, client_secret, token, level="cliente"):
 		response.status = HTTP_400
 		return { "error": "invalid_client" }
 
+def removeAuth(response, client_id):
+	"""Remove the login"""
+	locals		= eval(response.get_header("locals"))
+	level		= locals['level']
+	client_id	= locals['client_id']
+	try:
+			db_data.auth.delete_one({ "client_id": client_id })
+			return
+	except Exception as e:
+		response.status = HTTP_502
+		return { "error": "bad_gateway" }
+
 def sendToken(response, title, sender, receiver):
 	token = jwt.encode({
 			"client_id": receiver['client_id'],

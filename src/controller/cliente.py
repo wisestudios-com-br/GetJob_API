@@ -1,5 +1,5 @@
 import	json
-from	falcon		import HTTP_400, HTTP_403, HTTP_502
+from	falcon		import HTTP_201, HTTP_400, HTTP_403, HTTP_502
 from	datetime	import datetime
 
 from	model.cliente	import Cliente
@@ -47,6 +47,7 @@ def newCliente(response, data):
 		cliente["timestamp"]	= datetime.now()
 		cliente["timeupdate"]	= datetime.now()
 		cliente.save()
+		response.status = HTTP_201
 		return json.loads(cliente.to_json())
 	except Exception as e:
 		response.status = HTTP_502
@@ -69,6 +70,24 @@ def updateCliente(response, cpf, data):
 				cliente[key]	= value
 			cliente.save()
 			return json.loads(cliente.to_json())
+		except Exception as e:
+			response.status = HTTP_502
+			return { "error": "bad_gateway" }
+	else:
+		response.status = HTTP_403
+		return { "error" : "access_denied" }
+
+def deleteClienteByCpf(response, cpf):
+	locals	= eval(response.get_header("locals"))
+	if locals["client_id"] == cpf:
+		try:
+			delete	= auth.removeAuth(response, cpf)
+			if not delete:
+				return Cliente.objects.get(cpf=cpf).delete()
+			else:
+				print(delete)
+				return delete
+
 		except Exception as e:
 			response.status = HTTP_502
 			return { "error": "bad_gateway" }

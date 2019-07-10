@@ -34,6 +34,7 @@ def put_data(
 
 @hug.delete('/{id}', requires=auth.basicAccess("cliente"))
 def delete_data(
-	id: hug.types.number
+	id: hug.types.number,
+	response
 ):
-	return ""
+	return controllerCliente.deleteClienteByCpf(response, id)
