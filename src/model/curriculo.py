@@ -13,10 +13,10 @@ schema_curriculo	= {
 				"type": "object",
 				"properties": {
 					"data_inicio": {
-						"type": "date"
+						"type": "string"
 					},
 					"data_fim": {
-						"type": "date"
+						"type": "string"
 					},
 					"empresa": {
 						"type": "string"
@@ -33,7 +33,7 @@ schema_curriculo	= {
 							"type": "object",
 							"properties": {
 								"data": {
-									"type": "date"
+									"type": "string"
 								},
 								"titulo": {
 									"type": "string"
@@ -41,10 +41,21 @@ schema_curriculo	= {
 								"descricao": {
 									"type": "string"
 								}
-							}
+							},
+							"required": [
+								"data",
+								"titulo"
+							]
 						}
 					}
-				}
+				},
+				"required": [
+					"data_inicio",
+					"data_fim",
+					"empresa",
+					"funcao",
+					"observacao"
+				]
 			}
 		},
 		"experiencia_outra": {
@@ -53,18 +64,24 @@ schema_curriculo	= {
 				"type": "object",
 				"properties": {
 					"data_inicio": {
-						"type": "date"
+						"type": "string"
 					},
 					"data_fim": {
-						"type": "date"
+						"type": "string"
 					},
 					"tipo": {
 						"type": "string"
 					},
 					"resumo": {
 						"type": "string"
-					},
-				}
+					}
+				},
+				"required": [
+					"data_inicio",
+					"data_fim",
+					"tipo",
+					"resumo"
+				]
 			}
 		},
 		"escolaridade": {
@@ -72,6 +89,12 @@ schema_curriculo	= {
 			"items": {
 				"type": "object",
 				"properties": {
+					"data_inicio": {
+						"type": "string"
+					},
+					"data_fim": {
+						"type": "string"
+					},
 					"grau": {
 						"type": "string"
 					},
@@ -81,16 +104,17 @@ schema_curriculo	= {
 					"titulo": {
 						"type": "string"
 					},
-					"data_inicio": {
-						"type": "date"
-					},
-					"data_fim": {
-						"type": "date"
-					},
 					"anexo": {
 						"type": "string"
-					},
-				}
+					}
+				},
+				"required": [
+					"data_inicio",
+					"data_fim",
+					"grau",
+					"local",
+					"titulo"
+				]
 			}
 		},
 		"referencia": {
@@ -101,7 +125,10 @@ schema_curriculo	= {
 					"nome": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"nome"
+				]
 			}
 		},
 		"habilidade": {
@@ -112,7 +139,10 @@ schema_curriculo	= {
 					"nome": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"nome"
+				]
 			}
 		},
 		"idioma": {
@@ -123,7 +153,10 @@ schema_curriculo	= {
 					"nome": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"nome"
+				]
 			}
 		},
 		"mobilidade": {
@@ -134,7 +167,10 @@ schema_curriculo	= {
 					"veiculo": {
 						"type": "string"
 					}
-				}
+				},
+				"required": [
+					"veiculo"
+				]
 			}
 		},
 		"remuneracao": {
@@ -163,13 +199,25 @@ schema_curriculo	= {
 							"identificacao": {
 								"type": "string"
 							}
-						}
+						},
+						"required": [
+							"rede",
+							"identificacao"
+						]
 					}
 				}
-
-			}
+			},
+			"required": [
+				"email",
+				"telefone"
+			]
 		}
-	}
+	},
+	"required": [
+		"remuneracao",
+		"objetivo",
+		"contato"
+	]
 }
 
 class CurriculoType(hug.types.Type):
@@ -189,6 +237,7 @@ class Curso(EmbeddedDocument):
 	data		= DateField(required=True)
 	titulo		= StringField(max_length=100, required=True)
 	descricao	= StringField(max_length=500)
+	meta		= {'strict': False}
 
 class ExperienciaEmprego(EmbeddedDocument):
 	data_inicio	= DateField(required=True)
@@ -196,16 +245,28 @@ class ExperienciaEmprego(EmbeddedDocument):
 	empresa		= StringField(max_length=100, required=True)
 	funcao		= StringField(max_length=100, required=True)
 	observacao	= StringField(max_length=500, required=True)
-	curso		= ListField(EmbeddedDocument(Curso))
+	curso		= ListField(EmbeddedDocumentField(Curso))
+	meta		= {'strict': False}
 
 class ExperienciaOutra(EmbeddedDocument):
 	data_inicio	= DateField(required=True)
 	data_fim	= DateField(required=True)
 	tipo		= StringField(max_length=50, required=True)
 	resumo		= StringField(max_length=1000, required=True)
+	meta		= {'strict': False}
+
+class Escolaridade(EmbeddedDocument):
+	data_inicio	= DateField(required=True)
+	data_fim	= DateField(required=True)
+	grau		= StringField(max_length=50, required=True)
+	local		= StringField(max_length=100, required=True)
+	titulo		= StringField(max_length=100, required=True)
+	anexo		= StringField(max_length=500)
+	meta		= {'strict': False}
 
 class Nome(EmbeddedDocument):
 	nome	= StringField(max_length=100, required=True)
+	meta	= {'strict': False}
 
 class Mobilidade(EmbeddedDocument):
 	veiculo	= StringField(max_length=100, required=True)
@@ -213,22 +274,25 @@ class Mobilidade(EmbeddedDocument):
 class Social(EmbeddedDocument):
 	rede			= StringField(max_length=50, required=True)
 	identificacao	= StringField(max_length=50, required=True)
+	meta			= {'strict': False}
 
 class Contato(EmbeddedDocument):
 	email			= StringField(max_length=254, required=True)
 	telefone		= StringField(max_length=15, required=True)
-	social			= ListField(EmbeddedDocument(Social))
+	social			= ListField(EmbeddedDocumentField(Social))
+	meta			= {'strict': False}
 
 class Curriculo(EmbeddedDocument):
-	experiencia_emprego	= ListField(EmbeddedDocumentField(ExperienciaEmprego))
-	experiencia_outra	= ListField(EmbeddedDocumentField(ExperienciaOutra))
-	escolaridade		= ListField(EmbeddedDocumentField(Escolaridade), required=True)
-	referencia			= ListField(EmbeddedDocumentField(Nome))
-	habilidade			= ListField(EmbeddedDocumentField(Nome))
-	idioma				= ListField(EmbeddedDocumentField(Nome))
-	mobilidade			= ListField(EmbeddedDocumentField(Mobilidade))
+	experiencia_emprego	= EmbeddedDocumentListField(ExperienciaEmprego)
+	experiencia_outra	= EmbeddedDocumentListField(ExperienciaOutra)
+	escolaridade		= EmbeddedDocumentListField(Escolaridade)
+	referencia			= EmbeddedDocumentListField(Nome)
+	habilidade			= EmbeddedDocumentListField(Nome)
+	idioma				= EmbeddedDocumentListField(Nome)
+	mobilidade			= EmbeddedDocumentListField(Mobilidade)
 	remuneracao			= StringField(max_length=10, required=True)
 	objetivo			= StringField(max_length=500, required=True)
-	contato				= ListField(EmbeddedDocumentField(Contato), required=True)
-	timestamp			= DateTimeField(default=datetime.now())
-	time_update			= DateTimeField(default=datetime.now())
+	contato				= EmbeddedDocumentField(Contato, required=True)
+	timestamp			= DateTimeField(default=datetime.utcnow)
+	timeupdate			= DateTimeField(default=datetime.utcnow)
+	meta				= {'strict': False}
