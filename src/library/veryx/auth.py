@@ -44,9 +44,11 @@ def advancedAccess(request, response, level="empresa", context=None, **kwargs):
 			secret_key	= getSecret()
 
 			try:
-				user	= jwt.decode(token.encode('utf8'), secret_key, algorithm='HS256')
-				id		= request.relative_uri.split('/')[-1]
-				if str(user["client_id"]) == str(id) or user["level"] == level:
+				content	= jwt.decode(token.encode('utf8'), secret_key, algorithm='HS256')
+				id		= request.relative_uri.split('/')[-2]
+				if str(content["client_id"]) == str(id) or content["level"] == level:
+					content["id"]	= id
+					response.append_header('locals', content)
 					return True
 			except jwt.DecodeError:
 				response.status = HTTP_403
@@ -67,9 +69,10 @@ def ownerAccess(request, response, level="basic", context=None, **kwargs):
 			secret_key	= getSecret()
 
 			try:
-				user	= jwt.decode(token.encode('utf8'), secret_key, algorithm='HS256')
-				id		= request.relative_uri.split('/')[-1]
-				if str(user['client_id']) == str(id):
+				content	= jwt.decode(token.encode('utf8'), secret_key, algorithm='HS256')
+				id		= request.relative_uri.split('/')[-2]
+				if str(content['client_id']) == str(id):
+					response.append_header('locals', content)
 					return True
 			except jwt.DecodeError:
 				response.status = HTTP_403
