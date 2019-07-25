@@ -1,27 +1,31 @@
-import hug
+import	hug
 
-@hug.get('/')
-def get_index():
-	return ""
+from	library.veryx	import auth
+from	controller		import curriculo as controllerCurriculo
+from	model			import curriculo as modelCurriculo
 
-@hug.get('/{id}')
-def get_byId(
-	id: hug.types.number
+@hug.get('/', requires=auth.advancedAccess("empresa"))
+def get_index(
+	response
 ):
-	return ""
+	return controllerCurriculo.getCurriculo(response)
 
-@hug.post('/')
-def post_data():
-	return ""
+@hug.post('/', requires=auth.ownerAccess())
+def post_data(
+	curriculo: modelCurriculo.CurriculoType(),
+	response
+):
+	return controllerCurriculo.newCurriculo(response, curriculo)
 
-@hug.put('/{id}')
+@hug.put('/', requires=auth.ownerAccess())
 def put_data(
-	id: hug.types.number
+	curriculo: modelCurriculo.CurriculoType(),
+	response
 ):
-	return ""
+	return controllerCurriculo.updateCurriculo(response, curriculo)
 
-@hug.delete('/{id}')
+@hug.delete('/', requires=auth.ownerAccess())
 def delete_data(
-	id: hug.types.number
+	response
 ):
-	return ""
+	return controllerCurriculo.deleteCurriculo(response)

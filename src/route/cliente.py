@@ -3,6 +3,7 @@ import	hug
 from	library.veryx	import auth
 from	controller		import cliente as controllerCliente
 from	model			import cliente as modelCliente
+from	route			import curriculo
 
 @hug.get('/', requires=auth.basicAccess())
 def get_index(
@@ -38,3 +39,7 @@ def delete_data(
 	response
 ):
 	return controllerCliente.deleteClienteByCpf(response, id)
+
+@hug.extend_api('/{id}/curriculo')
+def curriculo_api():
+	return [curriculo]
