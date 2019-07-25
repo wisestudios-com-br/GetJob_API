@@ -85,7 +85,6 @@ def deleteClienteByCpf(response, cpf):
 			if not delete:
 				return Cliente.objects.get(cpf=cpf).delete()
 			else:
-				print(delete)
 				return delete
 
 		except Exception as e:
